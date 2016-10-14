@@ -12,6 +12,7 @@ namespace ZLib.Util
 	{
 		/// <summary>
 		/// 检查缓存，若存在则从缓存中获取结果，若不存在，则使用 handler 方法获取，并将结果缓存一定时间
+		/// 示例： string _s = CacheHelper.GetObjectWithCache<string>(HttpContext.Current.Cache, "CACHEKEY_Test", delegate { return "Sample"; }, 3 * 1000);
 		/// </summary>
 		/// <typeparam name="T">结果对象的类型</typeparam>
 		/// <param name="cache">缓存</param>

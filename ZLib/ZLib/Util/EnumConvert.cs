@@ -2,6 +2,9 @@
 
 namespace ZLib.Util
 {
+	/// <summary>
+	/// 枚举与数值类型转换工具
+	/// </summary>
 	public static class EnumConvert
 	{
 		/// <summary>
