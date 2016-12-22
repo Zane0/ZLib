@@ -44,7 +44,7 @@ namespace ZLib.Util
 		}
 
 		/// <summary>
-		/// 将长整形转为字节数组
+		/// 将长整形转为字节数组，相当于 new IPAddress(ladd).GetAddressBytes()
 		/// </summary>
 		/// <param name="ladd"></param>
 		/// <returns></returns>
