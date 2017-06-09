@@ -11,9 +11,9 @@ namespace ZLib.Util
 		/// <summary>
 		/// 过滤规则列表
 		/// </summary>
-		private IList<FilterRule> _filterRules;
+		private IList<IPFilterRule> _filterRules;
 
-		public IPFilter(IList<FilterRule> filterRules)
+		public IPFilter(IList<IPFilterRule> filterRules)
 		{
 			_filterRules = filterRules;
 		}
@@ -29,11 +29,11 @@ namespace ZLib.Util
 		/// <param name="ip"></param>
 		/// <param name="rule"></param>
 		/// <returns></returns>
-		private bool CheckFilter(IPAddress ip, FilterRule rule)
+		private bool CheckFilter(IPAddress ip, IPFilterRule rule)
 		{
 			byte[] _ipByte = ip.GetAddressBytes();
-			byte[] _filterIpByte = rule.IP.GetAddressBytes();
-			byte[] _filterMaskByte = rule.SubnetMask.GetAddressBytes();
+			byte[] _filterIpByte = rule.NetAddress.GetAddressBytes();
+			byte[] _filterMaskByte = rule.Mask.GetAddressBytes();
 			for (int _i = 0; _i < _ipByte.Length; _i++)
 			{
 				if ((_ipByte[_i] & _filterMaskByte[_i]) != _filterIpByte[_i])
@@ -66,9 +66,9 @@ namespace ZLib.Util
 		/// </summary>
 		/// <param name="stringRules"></param>
 		/// <returns></returns>
-		private IList<FilterRule> ReadFilterRules(string stringRules)
+		private IList<IPFilterRule> ReadFilterRules(string stringRules)
 		{
-			IList<FilterRule> _filterSettings = new List<FilterRule>();
+			IList<IPFilterRule> _filterSettings = new List<IPFilterRule>();
 			string filterString = stringRules;
 			string[] _ss = filterString.Split(';');
 			for (int _i = 0; _i < _ss.Length; _i++)
@@ -83,33 +83,33 @@ namespace ZLib.Util
 		/// </summary>
 		/// <param name="stringRule"></param>
 		/// <returns></returns>
-		private FilterRule ReadFilterRule(string stringRule)
+		private IPFilterRule ReadFilterRule(string stringRule)
 		{
-			FilterRule _fs = new FilterRule();
+			IPFilterRule _fs = new IPFilterRule();
 			int _pos = stringRule.IndexOf(',');
-			string _ip = stringRule;
-			string _subnetMask = "255.255.255.255";
+			string _address = stringRule;
+			string _mask = "255.255.255.255";
 			if (_pos > -1)
 			{
-				_ip = stringRule.Substring(0, _pos);
-				_subnetMask = stringRule.Substring(_pos + 1);
+				_address = stringRule.Substring(0, _pos);
+				_mask = stringRule.Substring(_pos + 1);
 			}
-			return new FilterRule() { IP = IPAddress.Parse(_ip), SubnetMask = IPAddress.Parse(_subnetMask) };
+			return new IPFilterRule() { NetAddress = IPAddress.Parse(_address), Mask = IPAddress.Parse(_mask) };
 		}
 	}
 
 	/// <summary>
 	/// 过滤规则，包括 IP 地址和子网掩码
 	/// </summary>
-	public class FilterRule
+	public class IPFilterRule
 	{
 		/// <summary>
-		/// IP 地址
+		/// 网络地址
 		/// </summary>
-		public IPAddress IP { get; set; }
+		public IPAddress NetAddress { get; set; }
 		/// <summary>
-		/// 子网掩码
+		/// 掩码
 		/// </summary>
-		public IPAddress SubnetMask { get; set; }
+		public IPAddress Mask { get; set; }
 	}
 }

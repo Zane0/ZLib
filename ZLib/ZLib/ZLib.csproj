@@ -46,7 +46,9 @@
     <Compile Include="Config\IPFilterConfigElement.cs" />
     <Compile Include="Config\IPFilterConfigurationSection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\AESHelper.cs" />
     <Compile Include="Util\CacheHelper.cs" />
+    <Compile Include="Util\DESHelper.cs" />
     <Compile Include="Util\EnumConvert.cs" />
     <Compile Include="Util\ExcelHelper.cs" />
     <Compile Include="Util\HttpHelper.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="Util\SerializeHelper.cs" />
     <Compile Include="Util\StructReader.cs" />
     <Compile Include="Util\TelecomsOperator.cs" />
+    <Compile Include="Util\TripleDESHelper.cs" />
     <Compile Include="Util\Wildcard.cs" />
     <Compile Include="Util\WildcardPath.cs" />
     <Compile Include="Util\WildcardUrl.cs" />
