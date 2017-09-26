@@ -29,7 +29,7 @@ namespace ZLib.Util
 		}
 
 		/// <summary>
-		/// 将字节数组转为 long
+		/// 将 IPv4 字节数组转为 long
 		/// </summary>
 		/// <param name="ipbytes"></param>
 		/// <returns></returns>
@@ -38,7 +38,7 @@ namespace ZLib.Util
 			long l = 0;
 			for (int i = 0; i < ipbytes.Length; i++)
 			{
-				l = (l << 8) + (ushort)ipbytes[i];
+				l = (l << 8) | ipbytes[i];
 			}
 			return l;
 		}

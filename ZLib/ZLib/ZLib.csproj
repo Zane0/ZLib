@@ -55,8 +55,10 @@
     <Compile Include="Util\IPConvert.cs" />
     <Compile Include="Util\IPFilter.cs" />
     <Compile Include="Util\PhoneNumber.cs" />
+    <Compile Include="Util\PropertyComparer.cs" />
     <Compile Include="Util\Sampling.cs" />
     <Compile Include="Util\SerializeHelper.cs" />
+    <Compile Include="Util\SortableBindingList.cs" />
     <Compile Include="Util\StructReader.cs" />
     <Compile Include="Util\TelecomsOperator.cs" />
     <Compile Include="Util\TripleDESHelper.cs" />
