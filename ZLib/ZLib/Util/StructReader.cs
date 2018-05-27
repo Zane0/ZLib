@@ -1,44 +1,65 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace ZLib.Util
 {
-	public static class StructReader
-	{
-		/// <summary>
-		/// 从流中读取结构
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="stream"></param>
-		/// <returns></returns>
-		public static T ReadStructFromStream<T>(Stream stream) where T : struct
-		{
+    public static class StructReader
+    {
+        /// <summary>
+        /// 从流中读取一个结构
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static T ReadStructFromStream<T>(Stream stream) where T : struct
+        {
 #line hidden
-			int _structSize = Marshal.SizeOf(typeof(T));
-			byte[] buffer = new byte[_structSize];
-			stream.Read(buffer, 0, _structSize);
-			return SerializeHelper.Bytes2Struct<T>(buffer);
-#line default
-		}
+            int _size = Marshal.SizeOf(typeof(T));
+            byte[] _bs = new byte[_size];
+            int _len = stream.Read(_bs, 0, _size);
+            if (_size > _len)
+            {
+                throw new ArgumentOutOfRangeException("stream", stream, "超出流的剩余长度");
+            }
 
-		/// <summary>
-		/// 从流中读取结构数组
-		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="stream"></param>
-		/// <param name="len">流的长度</param>
-		/// <returns></returns>
-		public static T[] ReadStructArrayFromStream<T>(Stream stream, int len) where T : struct
-		{
-#line hidden
-			int _size = len / Marshal.SizeOf(typeof(T));
-			T[] _ts = new T[_size];
-			for (int _i = 0; _i <= _size - 1; _i++)
-			{
-				_ts[_i] = StructReader.ReadStructFromStream<T>(stream);
-			}
-			return _ts;
+            IntPtr _ip = Marshal.UnsafeAddrOfPinnedArrayElement(_bs, 0);
+            return (T)Marshal.PtrToStructure(_ip, typeof(T));
 #line default
-		}
-	}
+        }
+
+        /// <summary>
+        /// 从流中读取多个结构
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ReadStructFromStream<T>(Stream stream, int count) where T : struct
+        {
+#line hidden
+            for (int _i = 0; _i <= count - 1; _i++)
+            {
+                yield return StructReader.ReadStructFromStream<T>(stream);
+            }
+#line default
+        }
+
+        /// <summary>
+        /// 从剩余流中读取多个结构
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="stream"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> ReadStructToEndFromStreamAll<T>(Stream stream) where T : struct
+        {
+#line hidden
+            long _streamRemainLength = stream.Length - stream.Position;
+            int _size = Marshal.SizeOf(typeof(T));
+            int _count = (int)(_streamRemainLength / _size);
+            return StructReader.ReadStructFromStream<T>(stream, _count);
+#line default
+        }
+    }
 }
