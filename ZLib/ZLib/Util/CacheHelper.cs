@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Web.Caching;
+using System.Runtime.Caching;
 
 namespace ZLib.Util
 {
@@ -20,7 +20,7 @@ namespace ZLib.Util
 		/// <param name="handler">获取结果的方法</param>
 		/// <param name="milliseconds">结果缓存的毫秒数</param>
 		/// <returns></returns>
-		public static T GetObjectWithCache<T>(Cache cache
+		public static T GetObjectWithCache<T>(ObjectCache cache
 			, string cacheKey
 			, GetObjectHandler handler
 			, double milliseconds) where T : class
@@ -31,43 +31,9 @@ namespace ZLib.Util
 				if (cache[cacheKey] == null)
 				{
 					_t = handler() as T;
-					cache.Insert(cacheKey
+					cache.Add(cacheKey
 						, _t
-						, null
-						, DateTime.UtcNow.AddMilliseconds(milliseconds)
-						, Cache.NoSlidingExpiration);
-				}
-				else
-				{
-					_t = cache[cacheKey] as T;
-				}
-			}
-			return _t;
-		}
-
-		/// <summary>
-		/// 检查缓存，若存在则从缓存中获取结果，若不存在，则使用 handler 方法获取，并将结果缓存，当文件更新时缓存清空
-		/// </summary>
-		/// <typeparam name="T">结果对象的类型</typeparam>
-		/// <param name="cache">缓存</param>
-		/// <param name="cacheKey">缓存的键值</param>
-		/// <param name="handler">获取结果的方法</param>
-		/// <param name="fileName">缓存更新监控的文件</param>
-		/// <returns></returns>
-		public static T GetObjectWithFileDependencyCache<T>(Cache cache
-			, string cacheKey
-			, GetObjectHandler handler
-			, string fileName) where T : class
-		{
-			T _t = null;
-			lock (GetLockByCacheKey(cacheKey))
-			{
-				if (cache[cacheKey] == null)
-				{
-					_t = handler() as T;
-					cache.Insert(cacheKey
-						, _t
-						, new CacheDependency(fileName));
+						, DateTime.UtcNow.AddMilliseconds(milliseconds));
 				}
 				else
 				{
