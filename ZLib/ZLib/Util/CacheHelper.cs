@@ -22,7 +22,7 @@ namespace ZLib.Util
 		/// <returns></returns>
 		public static T GetObjectWithCache<T>(ObjectCache cache
 			, string cacheKey
-			, GetObjectHandler handler
+			, Func<T> func
 			, double milliseconds) where T : class
 		{
 			T _t = null;
@@ -30,7 +30,7 @@ namespace ZLib.Util
 			{
 				if (cache[cacheKey] == null)
 				{
-					_t = handler() as T;
+					_t = func() as T;
 					cache.Add(cacheKey
 						, _t
 						, DateTime.UtcNow.AddMilliseconds(milliseconds));
@@ -70,11 +70,4 @@ namespace ZLib.Util
 
 		private static IDictionary<string, object> _locks = new Dictionary<string, object>();
 	}
-
-	/// <summary>
-	/// 获取结果对象的方法
-	/// </summary>
-	/// <param name="args">方法的参数</param>
-	/// <returns></returns>
-	public delegate object GetObjectHandler();
 }
