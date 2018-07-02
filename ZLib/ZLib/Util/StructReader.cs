@@ -15,20 +15,13 @@ namespace ZLib.Util
 		/// <returns></returns>
 		public static T ReadStructFromStream<T>(Stream stream) where T : struct
 		{
-#line hidden
 			int _size = Marshal.SizeOf(typeof(T));
-			byte[] _bs = new byte[_size];
-			int _len = stream.Read(_bs, 0, _size);
-			if (_size > _len)
-			{
-				throw new ArgumentOutOfRangeException("stream", stream, "超出流的剩余长度");
-			}
+			byte[] _bs = ReadBytes(stream, _size);
 			return SerializeHelper.Bytes2Struct<T>(_bs);
-#line default
 		}
 
 		/// <summary>
-		/// 从流中读取指定个结构
+		/// 从流中读取多个结构
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="stream"></param>
@@ -36,12 +29,10 @@ namespace ZLib.Util
 		/// <returns></returns>
 		public static IEnumerable<T> ReadStructFromStream<T>(Stream stream, int count) where T : struct
 		{
-#line hidden
 			for (int _i = 0; _i <= count - 1; _i++)
 			{
 				yield return ReadStructFromStream<T>(stream);
 			}
-#line default
 		}
 
 		/// <summary>
@@ -52,12 +43,32 @@ namespace ZLib.Util
 		/// <returns></returns>
 		public static IEnumerable<T> ReadStructToEndFromStreamAll<T>(Stream stream) where T : struct
 		{
-#line hidden
 			long _streamRemainLength = stream.Length - stream.Position;
 			int _size = Marshal.SizeOf(typeof(T));
 			int _count = (int)(_streamRemainLength / _size);
 			return ReadStructFromStream<T>(stream, _count);
-#line default
+		}
+
+		/// <summary>
+		/// 从流中读取字节
+		/// </summary>
+		/// <param name="stream">流</param>
+		/// <param name="count">需要读取的字节数</param>
+		/// <returns></returns>
+		private static byte[] ReadBytes(Stream stream, int count)
+		{
+			byte[] _buffer = new byte[count];
+			for (int _offset = 0; count > 0; )
+			{
+				int _num = stream.Read(_buffer, _offset, count);
+				if (_num == 0)
+				{
+					throw new ArgumentOutOfRangeException("stream", stream, "超出流的剩余长度");
+				}
+				_offset += _num;
+				count -= _num;
+			}
+			return _buffer;
 		}
 	}
 }
