@@ -23,7 +23,7 @@ namespace ZLib.Util
 			}
 			else
 			{
-				throw new Exception(i + " is not defined");
+				throw new ArgumentException(i + " is not defined");
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace ZLib.Util
 			}
 			else
 			{
-				throw new Exception(b + " is not defined");
+				throw new ArgumentException(b + " is not defined");
 			}
 		}
 	}
