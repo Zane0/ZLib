@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace ZLib.Util
 {
@@ -11,19 +12,19 @@ namespace ZLib.Util
 		/// 将整形转为枚举类型
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="i"></param>
+		/// <param name="value"></param>
 		/// <returns></returns>
-		public static T ToEnum<T>(int i)
+		public static T ToEnum<T>(int value)
 			where T : struct
 		{
 			Type _enumType = typeof(T);
-			if (Enum.IsDefined(_enumType, i))
+			if (Enum.IsDefined(_enumType, value))
 			{
-				return (T)Convert.ChangeType(i, Enum.GetUnderlyingType(_enumType));
+				return (T)Convert.ChangeType(value, Enum.GetUnderlyingType(_enumType), CultureInfo.InvariantCulture);
 			}
 			else
 			{
-				throw new ArgumentException(i + " is not defined");
+				throw new ArgumentException(value + " is not defined");
 			}
 		}
 
@@ -31,19 +32,19 @@ namespace ZLib.Util
 		/// 将字节转为枚举类型
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="b"></param>
+		/// <param name="value"></param>
 		/// <returns></returns>
-		public static T ToEnum<T>(byte b)
+		public static T ToEnum<T>(byte value)
 			where T : struct
 		{
 			Type _enumType = typeof(T);
-			if (Enum.IsDefined(_enumType, b))
+			if (Enum.IsDefined(_enumType, value))
 			{
-				return (T)Convert.ChangeType(b, Enum.GetUnderlyingType(_enumType));
+				return (T)Convert.ChangeType(value, Enum.GetUnderlyingType(_enumType), CultureInfo.InvariantCulture);
 			}
 			else
 			{
-				throw new ArgumentException(b + " is not defined");
+				throw new ArgumentException(value + " is not defined");
 			}
 		}
 	}

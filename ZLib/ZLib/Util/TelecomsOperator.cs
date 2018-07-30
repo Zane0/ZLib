@@ -9,7 +9,7 @@ namespace ZLib.Util
 		/// <summary>
 		/// 非手机号码
 		/// </summary>
-		UnKnown,
+		UNKnown,
 		/// <summary>
 		/// 中国移动
 		/// </summary>

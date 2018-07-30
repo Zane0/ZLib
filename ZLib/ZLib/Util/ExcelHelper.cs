@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Data.OleDb;
+using System.Globalization;
 using System.IO;
 
 namespace ZLib.Util
@@ -19,10 +20,10 @@ namespace ZLib.Util
 				string _cmdText = "select * from [" + firstTableName + "] ";
 				using (OleDbDataAdapter _adapter = new OleDbDataAdapter(_cmdText, _conn))
 				{
-					using (DataSet dt = new DataSet())
+					using (DataTable _dt = new DataTable() { Locale = CultureInfo.CurrentCulture })
 					{
-						_adapter.Fill(dt, "csv");
-						return dt.Tables[0];
+						_adapter.Fill(_dt, "csv");
+						return _dt;
 					}
 				}
 			}
@@ -37,54 +38,49 @@ namespace ZLib.Util
 				string _cmdText = "select * from [" + firstTableName + "] ";
 				using (OleDbDataAdapter _adapter = new OleDbDataAdapter(_cmdText, _conn))
 				{
-					using (DataSet dt = new DataSet())
+					using (DataTable _dt = new DataTable() { Locale = CultureInfo.CurrentCulture })
 					{
-						_adapter.Fill(dt, "csv");
-						return dt.Tables[0];
+						_adapter.Fill(_dt, "csv");
+						return _dt;
 					}
 				}
 			}
 		}
 
-		public static DataTable GetDataSetFromCSV(string csvFileName)
+		public static DataTable GetDataSetFromCsv(string csvFileName)
 		{
-			try
+			using (OleDbConnection _conn = new OleDbConnection())
 			{
-				using (OleDbConnection _conn = new OleDbConnection())
-				{
-					string pCsvpath = Path.GetDirectoryName(csvFileName);
-					string pCsvname = Path.GetFileName(csvFileName);
-					pCsvname = "A股用户2006";
+				string pCsvpath = Path.GetDirectoryName(csvFileName);
+				string pCsvname = Path.GetFileName(csvFileName);
+				pCsvname = "A股用户2006";
 
-					_conn.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + pCsvpath + ";Extended Properties='Text;FMT=Delimited(,);HDR=YES;IMEX=1';";
-					_conn.Open();
-					string _cmdText = "select * from [" + pCsvname + "] where 1=1";
-					using (OleDbCommand _cmd = new OleDbCommand(_cmdText, _conn))
+				_conn.ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + pCsvpath + ";Extended Properties='Text;FMT=Delimited(,);HDR=YES;IMEX=1';";
+				_conn.Open();
+				string _cmdText = "select * from [" + pCsvname + "] where 1=1";
+				using (OleDbCommand _cmd = new OleDbCommand(_cmdText, _conn))
+				{
+					using (OleDbDataAdapter _adapter = new OleDbDataAdapter(_cmd))
 					{
-						using (OleDbDataAdapter _adapter = new OleDbDataAdapter(_cmd))
+						using (DataTable _dt = new DataTable() { Locale = CultureInfo.CurrentCulture })
 						{
-							DataSet dt = new DataSet();
-							_adapter.Fill(dt, "csv");
-							return dt.Tables[0];
+							_adapter.Fill(_dt, "csv");
+							return _dt;
 						}
 					}
 				}
-			}
-			catch (Exception)
-			{
-				return null;
 			}
 		}
 
 		private static string GetFirstTableName(OleDbConnection conn)
 		{
 			conn.Open();
-			var tables = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { });
+			var _tables = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { });
 			conn.Close();
 
-			if (tables.Rows.Count == 0)
-			{ throw new ApplicationException("Excel必须包含一个表"); }
-			var firstTableName = tables.Rows[0]["TABLE_NAME"].ToString();
+			if (_tables.Rows.Count == 0)
+			{ throw new FormatException("Excel必须包含一个表"); }
+			var firstTableName = _tables.Rows[0]["TABLE_NAME"].ToString();
 			return firstTableName;
 		}
 	}

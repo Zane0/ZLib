@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Net;
 
 namespace ZLib.Util
@@ -6,16 +7,16 @@ namespace ZLib.Util
 	/// <summary>
 	/// IP 地址类型转换
 	/// </summary>
-	public class IPConvert
+	public static class IPConvert
 	{
 		/// <summary>
 		/// 将 IP 字符串转为 long
 		/// </summary>
 		/// <param name="ipstr"></param>
 		/// <returns></returns>
-		public static long ConvertToLong(string ipstr)
+		public static long ConvertToInt64(string ipstr)
 		{
-			return ConvertToLong(IPAddress.Parse((ipstr)));
+			return ConvertToInt64(IPAddress.Parse((ipstr)));
 		}
 
 		/// <summary>
@@ -23,9 +24,9 @@ namespace ZLib.Util
 		/// </summary>
 		/// <param name="ipadd"></param>
 		/// <returns></returns>
-		public static long ConvertToLong(IPAddress ipadd)
+		public static long ConvertToInt64(IPAddress ipadd)
 		{
-			return ConvertToLong(ipadd.GetAddressBytes());
+			return ConvertToInt64(ipadd.GetAddressBytes());
 		}
 
 		/// <summary>
@@ -33,7 +34,7 @@ namespace ZLib.Util
 		/// </summary>
 		/// <param name="ipbytes"></param>
 		/// <returns></returns>
-		public static long ConvertToLong(byte[] ipbytes)
+		public static long ConvertToInt64(byte[] ipbytes)
 		{
 			long l = 0;
 			for (int i = 0; i < ipbytes.Length; i++)
@@ -60,7 +61,7 @@ namespace ZLib.Util
 		/// <returns></returns>
 		public static byte[] ConvertToBytes(string ipstr)
 		{
-			return BitConverter.GetBytes(ConvertToLong(ipstr));
+			return BitConverter.GetBytes(ConvertToInt64(ipstr));
 		}
 
 		/// <summary>
@@ -71,7 +72,7 @@ namespace ZLib.Util
 		public static string ConvertToString(long ladd)
 		{
 			byte[] bs = IPConvert.ConvertToBytes(ladd);
-			return string.Format("{0}.{1}.{2}.{3}", bs[3], bs[2], bs[1], bs[0]);
+			return string.Format(CultureInfo.InvariantCulture, "{0}.{1}.{2}.{3}", bs[3], bs[2], bs[1], bs[0]);
 		}
 	}
 }

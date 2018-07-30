@@ -8,12 +8,12 @@ namespace ZLib.Util
 		internal bool _caseInsensitive;
 		internal string _pattern;
 		internal Regex _regex;
-		protected static Regex backslashRegex = new Regex(@"(?=[\\:])");
-		protected static Regex commaRegex = new Regex(",");
-		protected static Regex metaRegex = new Regex(@"[\+\{\\\[\|\(\)\.\^\$]");
-		protected static Regex questRegex = new Regex(@"\?");
-		protected static Regex slashRegex = new Regex("(?=/)");
-		protected static Regex starRegex = new Regex(@"\*");
+		protected readonly static Regex backslashRegex = new Regex(@"(?=[\\:])");
+		protected readonly static Regex commaRegex = new Regex(",");
+		protected readonly static Regex metaRegex = new Regex(@"[\+\{\\\[\|\(\)\.\^\$]");
+		protected readonly static Regex questRegex = new Regex(@"\?");
+		protected readonly static Regex slashRegex = new Regex("(?=/)");
+		protected readonly static Regex starRegex = new Regex(@"\*");
 
 		// Methods
 		internal Wildcard(string pattern, bool caseInsensitive)

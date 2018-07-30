@@ -29,7 +29,7 @@ namespace ZLib.Util
 		/// <param name="ip"></param>
 		/// <param name="rule"></param>
 		/// <returns></returns>
-		private bool CheckFilter(IPAddress ip, IPFilterRule rule)
+		private static bool CheckFilter(IPAddress ip, IPFilterRule rule)
 		{
 			byte[] _ipByte = ip.GetAddressBytes();
 			byte[] _filterIpByte = rule.NetAddress.GetAddressBytes();
@@ -66,7 +66,7 @@ namespace ZLib.Util
 		/// </summary>
 		/// <param name="stringRules"></param>
 		/// <returns></returns>
-		private IList<IPFilterRule> ReadFilterRules(string stringRules)
+		private static IList<IPFilterRule> ReadFilterRules(string stringRules)
 		{
 			IList<IPFilterRule> _filterSettings = new List<IPFilterRule>();
 			string filterString = stringRules;
@@ -83,9 +83,8 @@ namespace ZLib.Util
 		/// </summary>
 		/// <param name="stringRule"></param>
 		/// <returns></returns>
-		private IPFilterRule ReadFilterRule(string stringRule)
+		private static IPFilterRule ReadFilterRule(string stringRule)
 		{
-			IPFilterRule _fs = new IPFilterRule();
 			int _pos = stringRule.IndexOf(',');
 			string _address = stringRule;
 			string _mask = "255.255.255.255";
