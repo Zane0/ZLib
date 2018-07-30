@@ -83,7 +83,7 @@ namespace ZLib.Util
 			conn.Close();
 
 			if (tables.Rows.Count == 0)
-			{ throw new Exception("Excel必须包含一个表"); }
+			{ throw new ApplicationException("Excel必须包含一个表"); }
 			var firstTableName = tables.Rows[0]["TABLE_NAME"].ToString();
 			return firstTableName;
 		}
