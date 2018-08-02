@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 
 namespace ZLib.Util
 {
@@ -9,42 +8,52 @@ namespace ZLib.Util
 	public static class EnumConvert
 	{
 		/// <summary>
-		/// 将整形转为枚举类型
+		/// 将整形转为枚举类型，在转换过程中会检测数值是否在枚举中定义过。如果没有定义将抛出异常。
+		/// 如果不需要做值检测，可以直接强制转换，效率会更高
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="value"></param>
+		/// <typeparam name="TEnum">需要转换成的目标枚举</typeparam>
+		/// <param name="value">待转换的数值</param>
 		/// <returns></returns>
-		public static T ToEnum<T>(int value)
-			where T : struct
+		public static TEnum ToEnum<TEnum>(int value)
+			where TEnum : struct
 		{
-			Type _enumType = typeof(T);
+			Type _enumType = typeof(TEnum);
+			if (!_enumType.IsEnum)
+			{
+				throw new InvalidCastException("只能转换为枚举类型");
+			}
 			if (Enum.IsDefined(_enumType, value))
 			{
-				return (T)Convert.ChangeType(value, Enum.GetUnderlyingType(_enumType), CultureInfo.InvariantCulture);
+				return (TEnum)Enum.ToObject(_enumType, value);
 			}
 			else
 			{
-				throw new ArgumentException(value + " is not defined");
+				throw new ArgumentException("指定枚举中不存在具有指定值的常数", "value");
 			}
 		}
 
 		/// <summary>
-		/// 将字节转为枚举类型
+		/// 将字节转为枚举类型，在转换过程中会检测数值是否在枚举中定义过。如果没有定义将抛出异常。
+		/// 如果不需要做值检测，可以直接强制转换，效率会更高
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="value"></param>
+		/// <typeparam name="TEnum">需要转换成的目标枚举</typeparam>
+		/// <param name="value">待转换的数值</param>
 		/// <returns></returns>
-		public static T ToEnum<T>(byte value)
-			where T : struct
+		public static TEnum ToEnum<TEnum>(byte value)
+			where TEnum : struct
 		{
-			Type _enumType = typeof(T);
+			Type _enumType = typeof(TEnum);
+			if (!_enumType.IsEnum)
+			{
+				throw new InvalidCastException("只能转换为枚举类型");
+			}
 			if (Enum.IsDefined(_enumType, value))
 			{
-				return (T)Convert.ChangeType(value, Enum.GetUnderlyingType(_enumType), CultureInfo.InvariantCulture);
+				return (TEnum)Enum.ToObject(_enumType, value);
 			}
 			else
 			{
-				throw new ArgumentException(value + " is not defined");
+				throw new ArgumentException("指定枚举中不存在具有指定值的常数", "value");
 			}
 		}
 	}
