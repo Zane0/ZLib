@@ -3,11 +3,14 @@ using System.Diagnostics;
 
 namespace ZLib.Util
 {
-	public static class Performance
+	/// <summary>
+	/// 用于计算执行方法花费的时间
+	/// </summary>
+	public static class PerformanceHelper
 	{
 		/// <summary>
 		/// 获取方法执行花费的时间
-		///	TimeSpan _ts = CheckTime(() =>
+		///	TimeSpan _ts = PerformanceHelper.CheckTime(() =>
 		///	{
 		///	    for (int _i = 0; _i < 100000000; _i++)
 		///	    {
