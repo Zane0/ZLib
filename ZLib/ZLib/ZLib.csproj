@@ -55,6 +55,7 @@
     <Compile Include="Util\HttpHelper.cs" />
     <Compile Include="Util\IPConvert.cs" />
     <Compile Include="Util\IPFilter.cs" />
+    <Compile Include="Util\PerformanceHelper.cs" />
     <Compile Include="Util\PhoneNumber.cs" />
     <Compile Include="Util\PropertyComparer.cs" />
     <Compile Include="Util\Sampling.cs" />
